@@ -2,4 +2,5 @@ uvicorn
 fastapi
 pytest
 flake8
+coverage
 httpx
