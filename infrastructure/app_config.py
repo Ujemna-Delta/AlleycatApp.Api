@@ -3,7 +3,7 @@ from functools import lru_cache
 
 
 class AppSettings(BaseSettings):
-    persistence_url: str = "http://localhost:8000"
+    persistence_url: str = "https://localhost:7024"
 
 
 @lru_cache
