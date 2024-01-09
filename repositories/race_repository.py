@@ -1,5 +1,5 @@
 import requests
-from repository import Repository
+from repositories.repository import Repository
 from dtos import RaceDto
 
 

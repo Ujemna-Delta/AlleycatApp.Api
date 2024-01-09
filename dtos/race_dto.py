@@ -6,12 +6,12 @@ class RaceDto(Dto):
     id: int
     name: str
     description: str | None
-    begin_time: datetime
-    start_address: str
-    value_modifier: float
-    is_active: bool
-    is_free_order: bool
-    league_id: int | None
+    beginTime: datetime
+    startAddress: str
+    valueModifier: float
+    isActive: bool
+    isFreeOrder: bool
+    leagueId: int | None
 
     @classmethod
     def from_dict(cls, dictionary: dict) -> 'RaceDto':
@@ -20,11 +20,11 @@ class RaceDto(Dto):
         obj.id = dictionary['id']
         obj.name = dictionary['name']
         obj.description = dictionary['description']
-        obj.begin_time = dictionary['beginTime']
-        obj.start_address = dictionary['startAddress']
-        obj.value_modifier = dictionary['valueModifier']
-        obj.is_active = dictionary['isActive']
-        obj.is_free_order = dictionary['isFreeOrder']
-        obj.league_id = dictionary['leagueId']
+        obj.beginTime = dictionary['beginTime']
+        obj.startAddress = dictionary['startAddress']
+        obj.valueModifier = dictionary['valueModifier']
+        obj.isActive = dictionary['isActive']
+        obj.isFreeOrder = dictionary['isFreeOrder']
+        obj.leagueId = dictionary['leagueId']
 
         return obj
