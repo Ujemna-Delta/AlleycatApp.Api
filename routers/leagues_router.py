@@ -16,8 +16,9 @@ async def create_league(league: LeagueDto, repo: Annotated[ILeagueRepository, De
             raise HTTPException(status_code=409, detail="League with the specified name already exists.")
 
     response = repo.add_league(league)
+    content = response.json() if response.json() is not None else ""
     if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=response.json())
+        return JSONResponse(status_code=response.status_code, content=content)
 
     raise HTTPException(status_code=response.status_code, detail=response.json())
 
@@ -25,11 +26,12 @@ async def create_league(league: LeagueDto, repo: Annotated[ILeagueRepository, De
 @router.put("/{league_id}")
 async def update_league(league_id: int, league: LeagueDto, repo: Annotated[ILeagueRepository, Depends(get_league_repository)]):
     for r in repo.get_leagues():
-        if r.name == league.name:
+        if r.name == league.name and r.id != league_id:
             raise HTTPException(status_code=409, detail="League with the specified name already exists.")
 
     response = repo.update_league(league_id, league)
+    content = response.json() if response.json() is not None else ""
     if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=response.json())
+        return JSONResponse(status_code=response.status_code, content=content)
 
     raise HTTPException(status_code=response.status_code, detail=response.json())
