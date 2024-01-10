@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Depends
 from typing import Annotated
-from routers import races_router
+from routers import races_router, leagues_router
 import infrastructure
 
 app = FastAPI()
 app.include_router(races_router.router)
+app.include_router(leagues_router.router)
 
 
 @app.get("/")
