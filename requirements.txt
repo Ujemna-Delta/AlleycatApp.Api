@@ -1,5 +1,8 @@
 uvicorn
 fastapi
+pydantic
+pydantic-settings
+requests
 pytest
 flake8
 coverage
