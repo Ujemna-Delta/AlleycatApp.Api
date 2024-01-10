@@ -1,10 +1,10 @@
 import requests
 from abc import abstractmethod
-from repositories.repository import Repository
+from repositories.repository import UrlRepository
 from dtos import RaceDto
 
 
-class IRaceRepository(Repository):
+class IRaceRepository:
     @abstractmethod
     def get_races(self):
         pass
@@ -18,7 +18,7 @@ class IRaceRepository(Repository):
         pass
 
 
-class RaceRepository(IRaceRepository):
+class RaceRepository(UrlRepository, IRaceRepository):
     def __init__(self, base_url: str):
         super().__init__(base_url)
 
