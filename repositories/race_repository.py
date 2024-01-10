@@ -10,3 +10,6 @@ class RaceRepository(Repository):
     def get_races(self):
         elements = requests.get(f"{self.base_url}/api/races").json()
         return [RaceDto.from_dict(dto) for dto in elements]
+
+    def add_race(self, race: RaceDto) -> requests.Response:
+        return requests.post(f"{self.base_url}/api/races", json=race.to_dict())
