@@ -10,6 +10,10 @@ class IRaceRepository:
         pass
 
     @abstractmethod
+    def get_race_by_id(self, race_id: int):
+        pass
+
+    @abstractmethod
     def add_race(self, race: RaceDto):
         pass
 
@@ -25,6 +29,13 @@ class RaceRepository(UrlRepository, IRaceRepository):
     def get_races(self) -> list[RaceDto]:
         elements = requests.get(f"{self.base_url}/api/races").json()
         return [RaceDto.from_dict(dto) for dto in elements]
+
+    def get_race_by_id(self, race_id: int) -> RaceDto | None:
+        result = requests.get(f"{self.base_url}/api/races/{race_id}")
+        if result.status_code == 200:
+            return RaceDto.from_dict(result.json())
+
+        return None
 
     def add_race(self, race: RaceDto) -> requests.Response:
         return requests.post(f"{self.base_url}/api/races", json=race.to_dict())
