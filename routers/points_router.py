@@ -1,10 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
-from infrastructure import get_point_repository
-from repositories import IPointRepository
 from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException
 from dtos import PointDto, PointPreparationDto
-
+from infrastructure import get_point_repository, redirect_response
+from repositories import IPointRepository
 
 router = APIRouter(prefix="/api/points")
 
@@ -16,11 +14,7 @@ async def create_point(point: PointDto, repo: Annotated[IPointRepository, Depend
             raise HTTPException(status_code=409, detail="Point with the specified name already exists.")
 
     response = repo.add_point(point)
-    content = response.json() if response.json() is not None else ""
-    if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=content)
-
-    raise HTTPException(status_code=response.status_code, detail=response.json())
+    return redirect_response(response)
 
 
 @router.put("/{point_id}")
@@ -30,11 +24,7 @@ async def update_point(point_id: int, point: PointDto, repo: Annotated[IPointRep
             raise HTTPException(status_code=409, detail="Point with the specified name already exists.")
 
     response = repo.update_point(point_id, point)
-    content = response.json() if response.json() is not None else ""
-    if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=content)
-
-    raise HTTPException(status_code=response.status_code, detail=response.json())
+    return redirect_response(response)
 
 
 @router.post("/preparation")
@@ -48,8 +38,4 @@ async def prepare_point(point_to_prepare: PointPreparationDto, repo: Annotated[I
     point_to_update.isPrepared = True
 
     response = repo.update_point(point_to_update.id, point_to_update)
-    content = response.json() if response.json() is not None else ""
-    if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=content)
-
-    raise HTTPException(status_code=response.status_code, detail=response.json())
+    return redirect_response(response)

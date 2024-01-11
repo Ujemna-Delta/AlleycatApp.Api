@@ -1,10 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
-from infrastructure import get_race_repository
-from repositories import IRaceRepository
 from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException
 from dtos import RaceDto
-
+from infrastructure import get_race_repository, redirect_response
+from repositories import IRaceRepository
 
 router = APIRouter(prefix="/api/races")
 
@@ -27,11 +25,7 @@ async def create_race(race: RaceDto, repo: Annotated[IRaceRepository, Depends(ge
             raise HTTPException(status_code=409, detail="Race with the specified name already exists.")
 
     response = repo.add_race(race)
-    content = response.json() if response.json() is not None else ""
-    if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=content)
-
-    raise HTTPException(status_code=response.status_code, detail=response.json())
+    return redirect_response(response)
 
 
 @router.put("/{race_id}")
@@ -41,8 +35,4 @@ async def update_race(race_id: int, race: RaceDto, repo: Annotated[IRaceReposito
             raise HTTPException(status_code=409, detail="Race with the specified name already exists.")
 
     response = repo.update_race(race_id, race)
-    content = response.json() if response.json() is not None else ""
-    if 200 <= response.status_code <= 299:
-        return JSONResponse(status_code=response.status_code, content=content)
-
-    raise HTTPException(status_code=response.status_code, detail=response.json())
+    return redirect_response(response)
