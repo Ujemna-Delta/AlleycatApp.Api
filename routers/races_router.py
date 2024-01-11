@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import RaceDto
+from dtos import RaceDto, RaceActivationDto
 from infrastructure import get_race_repository, redirect_response
 from repositories import IRaceRepository
 
@@ -23,6 +23,20 @@ async def create_race(race: RaceDto, repo: Annotated[IRaceRepository, Depends(ge
             raise HTTPException(status_code=409, detail="Race with the specified name already exists.")
 
     response = repo.add_race(race)
+    return redirect_response(response)
+
+
+@router.post("/activation")
+async def activate_race(race_to_activate: RaceActivationDto,
+                        repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+    race_to_update = repo.get_race_by_id(race_to_activate.id)
+
+    if not race_to_update:
+        raise HTTPException(status_code=404, detail=f"Race with ID {race_to_activate.id} not found.")
+
+    race_to_update.isActive = True
+
+    response = repo.update_race(race_to_update.id, race_to_update)
     return redirect_response(response)
 
 
