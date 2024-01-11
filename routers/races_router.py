@@ -9,9 +9,7 @@ router = APIRouter(prefix="/api/races")
 
 @router.get("/active/{race_id}", response_model=bool)
 async def check_race_if_active(race_id: int, repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
-    existing_races = repo.get_races()
-    race = next((element for element in existing_races if element.id == race_id), None)
-
+    race = repo.get_race_by_id(race_id)
     if not race:
         raise HTTPException(status_code=404, detail=f"Race with ID {race_id} not found.")
 

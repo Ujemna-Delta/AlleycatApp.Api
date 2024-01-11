@@ -4,7 +4,7 @@ from requests import Response
 
 
 def redirect_response(response: Response):
-    content = "" if response.text else response.json()
+    content = None if not response.text else response.json()
     if 200 <= response.status_code <= 299:
         return JSONResponse(status_code=response.status_code, content=content)
 

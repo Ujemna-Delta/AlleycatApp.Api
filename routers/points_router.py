@@ -18,7 +18,8 @@ async def create_point(point: PointDto, repo: Annotated[IPointRepository, Depend
 
 
 @router.put("/{point_id}")
-async def update_point(point_id: int, point: PointDto, repo: Annotated[IPointRepository, Depends(get_point_repository)]):
+async def update_point(point_id: int, point: PointDto,
+                       repo: Annotated[IPointRepository, Depends(get_point_repository)]):
     for r in repo.get_points():
         if r.name == point.name and r.id != point_id:
             raise HTTPException(status_code=409, detail="Point with the specified name already exists.")
@@ -28,9 +29,9 @@ async def update_point(point_id: int, point: PointDto, repo: Annotated[IPointRep
 
 
 @router.post("/preparation")
-async def prepare_point(point_to_prepare: PointPreparationDto, repo: Annotated[IPointRepository, Depends(get_point_repository)]):
-    existing_points = repo.get_points()
-    point_to_update = next((point for point in existing_points if point.id == point_to_prepare.id), None)
+async def prepare_point(point_to_prepare: PointPreparationDto,
+                        repo: Annotated[IPointRepository, Depends(get_point_repository)]):
+    point_to_update = repo.get_point_by_id(point_to_prepare.id)
 
     if not point_to_update:
         raise HTTPException(status_code=404, detail=f"Point with ID {point_to_prepare.id} not found.")

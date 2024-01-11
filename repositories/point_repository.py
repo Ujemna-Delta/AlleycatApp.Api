@@ -10,6 +10,10 @@ class IPointRepository:
         pass
 
     @abstractmethod
+    def get_point_by_id(self, point_id: int):
+        pass
+
+    @abstractmethod
     def add_point(self, point: PointDto):
         pass
 
@@ -25,6 +29,13 @@ class PointRepository(UrlRepository, IPointRepository):
     def get_points(self) -> list[PointDto]:
         elements = requests.get(f"{self.base_url}/api/points").json()
         return [PointDto.from_dict(dto) for dto in elements]
+
+    def get_point_by_id(self, point_id: int) -> PointDto | None:
+        result = requests.get(f"{self.base_url}/api/points/{point_id}")
+        if result.status_code == 200:
+            return PointDto.from_dict(result.json())
+
+        return None
 
     def add_point(self, point: PointDto) -> requests.Response:
         return requests.post(f"{self.base_url}/api/points", json=point.to_dict())
