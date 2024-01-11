@@ -31,3 +31,20 @@ class PointDto(Dto):
                'isPrepared': self.isPrepared, 'isHidden': self.isHidden, 'order': self.order, 'raceId': self.raceId}
 
         return obj
+
+
+class PointPreparationDto(Dto):
+    id: int = 0
+
+    @classmethod
+    def from_dict(cls, dictionary: dict) -> 'PointPreparationDto':
+        obj = cls()
+
+        obj.id = dictionary['id']
+
+        return obj
+
+    def to_dict(self) -> dict:
+        obj = {'id': self.id}
+
+        return obj
