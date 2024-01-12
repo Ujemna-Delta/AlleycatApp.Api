@@ -1,10 +1,11 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import PointDto, PointPreparationDto
+from dtos import PointDto, PointPreparationDto, PointCompletionDto
 from infrastructure import get_point_repository, redirect_response
 from repositories import IPointRepository
 
 router = APIRouter(prefix="/api/points")
+completion_router = APIRouter(prefix="/api/completions/points")
 
 
 @router.post("/")
@@ -39,4 +40,12 @@ async def prepare_point(point_to_prepare: PointPreparationDto,
     point_to_update.isPrepared = True
 
     response = repo.update_point(point_to_update.id, point_to_update)
+    return redirect_response(response)
+
+
+@completion_router.post("/")
+async def complete_task(point_completion: PointCompletionDto,
+                        repo: Annotated[IPointRepository, Depends(get_point_repository)]):
+
+    response = repo.add_point_completion(point_completion)
     return redirect_response(response)

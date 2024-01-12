@@ -1,7 +1,7 @@
 import requests
 from abc import abstractmethod
 from repositories.repository import UrlRepository
-from dtos import PointDto
+from dtos import PointDto, PointCompletionDto
 
 
 class IPointRepository:
@@ -19,6 +19,10 @@ class IPointRepository:
 
     @abstractmethod
     def update_point(self, point_id: int, point: PointDto):
+        pass
+
+    @abstractmethod
+    def add_point_completion(self, point_completion: PointCompletionDto):
         pass
 
 
@@ -42,3 +46,6 @@ class PointRepository(UrlRepository, IPointRepository):
 
     def update_point(self, point_id: int, point: PointDto) -> requests.Response:
         return requests.put(f"{self.base_url}/api/points/{point_id}", json=point.to_dict())
+
+    def add_point_completion(self, point_completion: PointCompletionDto) -> requests.Response:
+        return requests.post(f"{self.base_url}/api/completions/points", json=point_completion.to_dict())
