@@ -80,7 +80,7 @@ class RaceAttendanceDto(Dto):
 
 class RaceCompletionDto(Dto):
     id: int = 0
-    # timestamp: datetime = datetime(1970, 1, 1)
+    timestamp: datetime = datetime(1970, 1, 1)
     hasWithdrawn: bool = False
     score: float = 0
     attendeeId: str = ""
@@ -91,7 +91,7 @@ class RaceCompletionDto(Dto):
         obj = cls()
 
         obj.id = dictionary['id']
-        # obj.timestamp = dictionary['timestamp']
+        obj.timestamp = dictionary['timestamp']
         obj.hasWithdrawn = dictionary['hasWithdrawn']
         obj.score = dictionary['score']
         obj.attendeeId = dictionary['attendeeId']
@@ -100,7 +100,7 @@ class RaceCompletionDto(Dto):
         return obj
 
     def to_dict(self) -> dict:
-        obj = {'id': self.id, 'hasWithdrawn': self.hasWithdrawn, 'score': self.score,
+        obj = {'id': self.id, 'timestamp': self.timestamp, 'hasWithdrawn': self.hasWithdrawn, 'score': self.score,
                'attendeeId': self.attendeeId, 'raceId': self.raceId}
 
         return obj
