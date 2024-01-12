@@ -1,7 +1,7 @@
 import requests
 from abc import abstractmethod
 from repositories.repository import UrlRepository
-from dtos import RaceDto
+from dtos import RaceDto, RaceAttendanceDto
 
 
 class IRaceRepository:
@@ -19,6 +19,10 @@ class IRaceRepository:
 
     @abstractmethod
     def update_race(self, race_id: int, race: RaceDto):
+        pass
+
+    @abstractmethod
+    def add_race_attendance(self, race_attendance: RaceAttendanceDto):
         pass
 
 
@@ -42,3 +46,6 @@ class RaceRepository(UrlRepository, IRaceRepository):
 
     def update_race(self, race_id: int, race: RaceDto) -> requests.Response:
         return requests.put(f"{self.base_url}/api/races/{race_id}", json=race.to_dict())
+
+    def add_race_attendance(self, race_attendance: RaceAttendanceDto) -> requests.Response:
+        return requests.post(f"{self.base_url}/api/races/attendances", json=race_attendance.to_dict())

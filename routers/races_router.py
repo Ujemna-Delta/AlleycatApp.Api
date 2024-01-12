@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import RaceDto, RaceActivationDto
+from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto
 from infrastructure import get_race_repository, redirect_response
 from repositories import IRaceRepository
 
@@ -47,4 +47,12 @@ async def update_race(race_id: int, race: RaceDto, repo: Annotated[IRaceReposito
             raise HTTPException(status_code=409, detail="Race with the specified name already exists.")
 
     response = repo.update_race(race_id, race)
+    return redirect_response(response)
+
+
+@router.post("/attendances")
+async def create_race_attendance(race_attendance: RaceAttendanceDto,
+                                 repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+
+    response = repo.add_race_attendance(race_attendance)
     return redirect_response(response)
