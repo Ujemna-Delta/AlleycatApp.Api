@@ -8,6 +8,7 @@ app.include_router(leagues_router.router)
 app.include_router(points_router.router)
 app.include_router(races_router.router)
 app.include_router(tasks_router.router)
+app.include_router(tasks_router.completion_router)
 
 
 @app.get("/")

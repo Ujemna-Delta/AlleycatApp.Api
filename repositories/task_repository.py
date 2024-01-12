@@ -1,7 +1,7 @@
 import requests
 from abc import abstractmethod
 from repositories.repository import UrlRepository
-from dtos import TaskDto
+from dtos import TaskDto, TaskCompletionDto
 
 
 class ITaskRepository:
@@ -15,6 +15,10 @@ class ITaskRepository:
 
     @abstractmethod
     def update_task(self, task_id: int, task: TaskDto):
+        pass
+
+    @abstractmethod
+    def add_task_completion(self, task_completion: TaskCompletionDto):
         pass
 
 
@@ -31,3 +35,6 @@ class TaskRepository(UrlRepository, ITaskRepository):
 
     def update_task(self, task_id: int, task: TaskDto) -> requests.Response:
         return requests.put(f"{self.base_url}/api/tasks/{task_id}", json=task.to_dict())
+
+    def add_task_completion(self, task_completion: TaskCompletionDto) -> requests.Response:
+        return requests.post(f"{self.base_url}/api/completions/tasks", json=task_completion.to_dict())
