@@ -1,10 +1,11 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto
+from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto, RaceCompletionDto
 from infrastructure import get_race_repository, redirect_response
 from repositories import IRaceRepository
 
 router = APIRouter(prefix="/api/races")
+completion_router = APIRouter(prefix="/api/completions/races")
 
 
 @router.get("/active/{race_id}", response_model=bool)
@@ -55,4 +56,12 @@ async def create_race_attendance(race_attendance: RaceAttendanceDto,
                                  repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
 
     response = repo.add_race_attendance(race_attendance)
+    return redirect_response(response)
+
+
+@completion_router.post("/")
+async def complete_race(race_completion: RaceCompletionDto,
+                        repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+
+    response = repo.add_race_completion(race_completion)
     return redirect_response(response)

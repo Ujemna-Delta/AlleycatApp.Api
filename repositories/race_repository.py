@@ -1,7 +1,7 @@
 import requests
 from abc import abstractmethod
 from repositories.repository import UrlRepository
-from dtos import RaceDto, RaceAttendanceDto
+from dtos import RaceDto, RaceAttendanceDto, RaceCompletionDto
 
 
 class IRaceRepository:
@@ -23,6 +23,10 @@ class IRaceRepository:
 
     @abstractmethod
     def add_race_attendance(self, race_attendance: RaceAttendanceDto):
+        pass
+
+    @abstractmethod
+    def add_race_completion(self, race_completion: RaceCompletionDto):
         pass
 
 
@@ -49,3 +53,6 @@ class RaceRepository(UrlRepository, IRaceRepository):
 
     def add_race_attendance(self, race_attendance: RaceAttendanceDto) -> requests.Response:
         return requests.post(f"{self.base_url}/api/races/attendances", json=race_attendance.to_dict())
+
+    def add_race_completion(self, race_completion: RaceCompletionDto) -> requests.Response:
+        return requests.post(f"{self.base_url}/api/completions/races", json=race_completion.to_dict())
