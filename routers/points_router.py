@@ -69,7 +69,7 @@ async def get_remaining_users_on_point(point_id: int,
                            if attendee not in race_finish_attendees
                            and attendee not in point_finish_attendees]
 
-    return {"remaining_attendees": remaining_attendees}
+    return remaining_attendees
 
 
 @completion_router.post("/")
