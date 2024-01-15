@@ -37,6 +37,10 @@ class IRaceRepository:
     def get_race_completion_by_race_id(self, race_id: int):
         pass
 
+    @abstractmethod
+    def get_race_completion_by_attendee_id(self, attendee_id: str):
+        pass
+
 
 class RaceRepository(UrlRepository, IRaceRepository):
     def __init__(self, base_url: str):
@@ -74,4 +78,8 @@ class RaceRepository(UrlRepository, IRaceRepository):
 
     def get_race_completion_by_race_id(self, race_id: int) -> list[RaceCompletionDto]:
         elements = requests.get(f"{self.base_url}/api/completions/races/race/{race_id}").json()
+        return [RaceCompletionDto.from_dict(dto) for dto in elements]
+
+    def get_race_completion_by_attendee_id(self, attendee_id: str) -> list[RaceCompletionDto]:
+        elements = requests.get(f"{self.base_url}/api/completions/races/attendee/{attendee_id}").json()
         return [RaceCompletionDto.from_dict(dto) for dto in elements]

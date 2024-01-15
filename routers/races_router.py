@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto, RaceCompletionDto
+from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto, RaceCompletionDto, RaceResultDto
 from infrastructure import get_race_repository, redirect_response
 from repositories import IRaceRepository
 
@@ -57,6 +57,56 @@ async def create_race_attendance(race_attendance: RaceAttendanceDto,
 
     response = repo.add_race_attendance(race_attendance)
     return redirect_response(response)
+
+
+@router.get("/results/{race_id}")
+async def get_race_results(race_id: int, repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+    race = repo.get_race_by_id(race_id)
+    if not race:
+        raise HTTPException(status_code=404, detail=f"Race with ID {race_id} not found.")
+
+    race_scores = repo.get_race_completion_by_race_id(race_id)
+    sorted_race_scores = sorted(race_scores, key=lambda x: x.score, reverse=True)
+
+    race_results_list = [
+        RaceResultDto(
+            attendeeId=race_score.attendeeId,
+            rank=rank + 1,
+            score=race_score.score,
+            raceId=race_score.raceId
+        ).to_dict()
+        for rank, race_score in enumerate(sorted_race_scores)
+    ]
+
+    return race_results_list
+
+
+@router.get("/results/user/{attendee_id}")
+async def get_race_results_by_attendee_id(attendee_id: str,
+                                          repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+
+    race_scores = repo.get_race_completion_by_attendee_id(attendee_id)
+    race_ids = [race_score.raceId for race_score in race_scores]
+
+    race_results_final = []
+    for race_id in race_ids:
+        race_scores = repo.get_race_completion_by_race_id(race_id)
+        sorted_race_scores = sorted(race_scores, key=lambda x: x.score, reverse=True)
+
+        race_results_list = [
+            RaceResultDto(
+                attendeeId=race_score.attendeeId,
+                rank=rank + 1,
+                score=race_score.score,
+                raceId=race_score.raceId
+            ).to_dict()
+            for rank, race_score in enumerate(sorted_race_scores)
+            if race_score.attendeeId == attendee_id
+        ]
+
+        race_results_final.extend(race_results_list)
+
+    return race_results_final
 
 
 @completion_router.post("/")

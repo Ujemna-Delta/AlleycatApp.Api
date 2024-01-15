@@ -104,3 +104,26 @@ class RaceCompletionDto(Dto):
                'attendeeId': self.attendeeId, 'raceId': self.raceId}
 
         return obj
+
+
+class RaceResultDto(Dto):
+    attendeeId: str = ""
+    rank: int = 0
+    score: float = 0
+    raceId: int = 0
+
+    @classmethod
+    def from_dict(cls, dictionary: dict) -> 'RaceResultDto':
+        obj = cls()
+
+        obj.attendeeId = dictionary['attendeeId']
+        obj.rank = dictionary['rank']
+        obj.score = dictionary['score']
+        obj.raceId = dictionary['raceId']
+
+        return obj
+
+    def to_dict(self) -> dict:
+        obj = {'attendeeId': self.attendeeId, 'rank': self.rank, 'score': self.score, 'raceId': self.raceId}
+
+        return obj
