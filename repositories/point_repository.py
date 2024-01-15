@@ -25,6 +25,10 @@ class IPointRepository:
     def add_point_completion(self, point_completion: PointCompletionDto):
         pass
 
+    @abstractmethod
+    def get_point_completion_by_point_id(self, point_id: int):
+        pass
+
 
 class PointRepository(UrlRepository, IPointRepository):
     def __init__(self, base_url: str):
@@ -49,3 +53,7 @@ class PointRepository(UrlRepository, IPointRepository):
 
     def add_point_completion(self, point_completion: PointCompletionDto) -> requests.Response:
         return requests.post(f"{self.base_url}/api/completions/points", json=point_completion.to_dict())
+
+    def get_point_completion_by_point_id(self, point_id: int) -> list[PointCompletionDto]:
+        elements = requests.get(f"{self.base_url}/api/completions/points/point/{point_id}").json()
+        return [PointCompletionDto.from_dict(dto) for dto in elements]
