@@ -32,10 +32,10 @@ async def update_point(point_id: int, point: PointDto,
 @router.post("/preparation")
 async def prepare_point(point_to_prepare: PointPreparationDto,
                         repo: Annotated[IPointRepository, Depends(get_point_repository)]):
-    point_to_update = repo.get_point_by_id(point_to_prepare.id)
+    point_to_update = repo.get_point_by_id(point_to_prepare.pointId)
 
     if not point_to_update:
-        raise HTTPException(status_code=404, detail=f"Point with ID {point_to_prepare.id} not found.")
+        raise HTTPException(status_code=404, detail=f"Point with ID {point_to_prepare.pointId} not found.")
 
     point_to_update.isPrepared = True
 

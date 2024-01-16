@@ -35,18 +35,18 @@ class PointDto(Dto):
 
 
 class PointPreparationDto(Dto):
-    id: int = 0
+    pointId: int = 0
 
     @classmethod
     def from_dict(cls, dictionary: dict) -> 'PointPreparationDto':
         obj = cls()
 
-        obj.id = dictionary['id']
+        obj.pointId = dictionary['pointId']
 
         return obj
 
     def to_dict(self) -> dict:
-        obj = {'id': self.id}
+        obj = {'pointId': self.pointId}
 
         return obj
 

@@ -39,18 +39,18 @@ class RaceDto(Dto):
 
 
 class RaceActivationDto(Dto):
-    id: int = 0
+    raceId: int = 0
 
     @classmethod
     def from_dict(cls, dictionary: dict) -> 'RaceActivationDto':
         obj = cls()
 
-        obj.id = dictionary['id']
+        obj.raceId = dictionary['raceId']
 
         return obj
 
     def to_dict(self) -> dict:
-        obj = {'id': self.id}
+        obj = {'raceId': self.raceId}
 
         return obj
 

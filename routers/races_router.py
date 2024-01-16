@@ -31,10 +31,10 @@ async def create_race(race: RaceDto, repo: Annotated[IRaceRepository, Depends(ge
 @router.post("/activation")
 async def activate_race(race_to_activate: RaceActivationDto,
                         repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
-    race_to_update = repo.get_race_by_id(race_to_activate.id)
+    race_to_update = repo.get_race_by_id(race_to_activate.raceId)
 
     if not race_to_update:
-        raise HTTPException(status_code=404, detail=f"Race with ID {race_to_activate.id} not found.")
+        raise HTTPException(status_code=404, detail=f"Race with ID {race_to_activate.raceId} not found.")
 
     race_to_update.isActive = True
 
