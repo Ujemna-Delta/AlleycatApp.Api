@@ -127,3 +127,22 @@ class RaceResultDto(Dto):
         obj = {'attendeeId': self.attendeeId, 'rank': self.rank, 'score': self.score, 'raceId': self.raceId}
 
         return obj
+
+
+class RaceWithdrawalDto(Dto):
+    attendeeId: str = ""
+    raceId: int = 0
+
+    @classmethod
+    def from_dict(cls, dictionary: dict) -> 'RaceWithdrawalDto':
+        obj = cls()
+
+        obj.attendeeId = dictionary['attendeeId']
+        obj.raceId = dictionary['raceId']
+
+        return obj
+
+    def to_dict(self) -> dict:
+        obj = {'attendeeId': self.attendeeId, 'raceId': self.raceId}
+
+        return obj

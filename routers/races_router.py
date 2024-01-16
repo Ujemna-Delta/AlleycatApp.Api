@@ -1,8 +1,9 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto, RaceCompletionDto, RaceResultDto
+from dtos import RaceDto, RaceActivationDto, RaceAttendanceDto, RaceCompletionDto, RaceResultDto, RaceWithdrawalDto
 from infrastructure import get_race_repository, redirect_response
 from repositories import IRaceRepository
+from datetime import datetime
 
 router = APIRouter(prefix="/api/races")
 completion_router = APIRouter(prefix="/api/completions/races")
@@ -107,6 +108,23 @@ async def get_race_results_by_attendee_id(attendee_id: str,
         race_results_final.extend(race_results_list)
 
     return race_results_final
+
+
+@router.post("/withdrawal")
+async def race_user_withdrawal(race_withdrawal: RaceWithdrawalDto,
+                               repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
+
+    race_completion = RaceCompletionDto(
+        id=0,
+        timestamp=datetime.now(),
+        hasWithdrawn=True,
+        score=0,
+        attendeeId=race_withdrawal.attendeeId,
+        raceId=race_withdrawal.raceId
+    )
+
+    response = repo.add_race_completion(race_completion)
+    return redirect_response(response)
 
 
 @completion_router.post("/")
