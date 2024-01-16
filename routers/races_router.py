@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/races")
 completion_router = APIRouter(prefix="/api/completions/races")
 
 
-@router.get("/active/{race_id}", response_model=bool)
+@router.get("/active/{race_id}")
 async def check_race_if_active(race_id: int, repo: Annotated[IRaceRepository, Depends(get_race_repository)]):
     race = repo.get_race_by_id(race_id)
     if not race:
