@@ -1,3 +1,4 @@
+from datetime import datetime
 from .dto import Dto
 
 
@@ -34,17 +35,40 @@ class PointDto(Dto):
 
 
 class PointPreparationDto(Dto):
-    id: int = 0
+    pointId: int = 0
 
     @classmethod
     def from_dict(cls, dictionary: dict) -> 'PointPreparationDto':
         obj = cls()
 
-        obj.id = dictionary['id']
+        obj.pointId = dictionary['pointId']
 
         return obj
 
     def to_dict(self) -> dict:
-        obj = {'id': self.id}
+        obj = {'pointId': self.pointId}
+
+        return obj
+
+
+class PointCompletionDto(Dto):
+    id: int = 0
+    timestamp: datetime = datetime(1970, 1, 1)
+    attendeeId: str = ""
+    pointId: int = 0
+
+    @classmethod
+    def from_dict(cls, dictionary: dict) -> 'PointCompletionDto':
+        obj = cls()
+
+        obj.id = dictionary['id']
+        obj.timestamp = dictionary['timestamp']
+        obj.attendeeId = dictionary['attendeeId']
+        obj.pointId = dictionary['pointId']
+
+        return obj
+
+    def to_dict(self) -> dict:
+        obj = {'id': self.id, 'timestamp': self.timestamp, 'attendeeId': self.attendeeId, 'pointId': self.pointId}
 
         return obj
